@@ -1,0 +1,99 @@
+#VRML_SIM R2022a utf8
+WorldInfo {
+  basicTimeStep 16
+}
+Viewpoint {
+  orientation -0.29025101666895736 0.702364492485245 0.6499526652138452 1.1326745369099924
+  position -1.1047243012800634 -1.0680274513423116 1.724848994721731
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 1 1
+}
+WoodenBox {
+  translation 0.3 0.31 0.05
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation 0.06 -0.3 0.05
+  name "wooden box(1)"
+  size 0.1 0.1 0.1
+}
+WoodenBox {
+  translation -0.35 0.11 0.05
+  name "wooden box(2)"
+  size 0.1 0.1 0.1
+}
+E-puck {
+  translation 2.3366680837271236e-11 1.77051680104698e-11 -3.198097920356635e-05
+  rotation 0.9805576955360747 -0.19623099865809596 2.9843407754202194e-05 2.8493863991057705e-09
+  controller "epuck_avoid_collision"
+}
+Solid {
+  translation 0.2 0 0.2
+  children [
+    Shape {
+      appearance PBRAppearance {
+        baseColorMap ImageTexture {
+          url [
+            "../textures/red_brick_wall.jpg"
+          ]
+        }
+        metalness 0
+      }
+      geometry DEF BALL_GEOMETRY Sphere {
+        radius 0.05
+        subdivision 2
+      }
+    }
+  ]
+  boundingObject USE BALL_GEOMETRY
+  physics Physics {
+  }
+}
+Solid {
+  translation 0.51 0 0.05
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+        baseColor 0 0.333333 1
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 1 0.1
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0 0.51 0.05
+  rotation 0 0 1 1.5708003061004252
+  children [
+    USE WALL
+  ]
+  name "solid(2)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0 -0.51 0.05
+  rotation 0 0 1 1.5707996938995747
+  children [
+    USE WALL
+  ]
+  name "solid(3)"
+  boundingObject USE WALL
+}
+Solid {
+  translation -0.51 0 0.05
+  children [
+    USE WALL
+  ]
+  name "solid(4)"
+  boundingObject USE WALL
+}

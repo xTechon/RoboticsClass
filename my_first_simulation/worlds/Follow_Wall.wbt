@@ -1,0 +1,77 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material2 "dumbbell"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.310275057579059 0.7726194308952326 0.553885009408486 1.2546680777616295
+  position -1.4951996163379988 -1.4375498212995932 3.3006145701280074
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  size 1 1
+}
+E-puck {
+  translation 0.42 0 0
+  rotation 0 0 -1 -1.5708003061004252
+  controller "epuck_Follow_Wall"
+}
+Solid {
+  translation 0.51 0 0.05
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+        baseColor 0 0.333333 1
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 1 0.1
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0 0.51 0.05
+  rotation 0 0 1 1.5708003061004252
+  children [
+    USE WALL
+  ]
+  name "solid(2)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0 -0.51 0.05
+  rotation 0 0 1 1.5707996938995747
+  children [
+    USE WALL
+  ]
+  name "solid(3)"
+  boundingObject USE WALL
+}
+Solid {
+  translation -0.51 0 0.05
+  children [
+    USE WALL
+  ]
+  name "solid(4)"
+  boundingObject USE WALL
+}
