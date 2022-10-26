@@ -4,10 +4,10 @@
 // Author:
 // Modifications:
 
-// You may need to add webots include files such as
-// <webots/DistanceSensor.hpp>, <webots/Motor.hpp>, etc.
-// and/or to add some other includes
+#include <cstddef>
 #include <iostream>
+#include <ostream>
+#include <vector>
 #define TIME_STEP 64
 #define MAX_SPEED 6.28
 
@@ -19,35 +19,22 @@
 // All the webots classes are defined in the "webots" namespace
 using namespace webots;
 
-// This is the main program of your controller.
-// It creates an instance of your Robot instance, launches its
-// function(s) and destroys it at the end of the execution.
-// Note that only one instance of Robot should be created in
-// a controller program.
-// The arguments of the main function can be specified by the
-// "controllerArgs" field of the Robot node
 int main(int argc, char **argv) {
   // create the Robot instance.
   Robot *robot = new Robot();
 
   // get the time step of the current world.
-  int timeStep = (int)robot->getBasicTimeStep();
-
-  // You should insert a getDevice-like function in order to get the
-  // instance of a device of the robot. Something like:
-  //  Motor *motor = robot->getMotor("motorname");
-  //  DistanceSensor *ds = robot->getDistanceSensor("dsname");
-  //  ds->enable(timeStep);
+  // int timeStep = (int)robot->getBasicTimeStep();
 
   // Webots Camera
   Camera *cam = robot->getCamera("camera");
   cam->enable(TIME_STEP);
+
   // Add and enable color recognition camera
   Camera *colorCam = robot->getCamera("colorCamera");
   colorCam->recognitionEnable(TIME_STEP);
   colorCam->enableRecognitionSegmentation();
   colorCam->enable(TIME_STEP);
-  // std::cout << colorCam->getName() << std::endl;
 
   Motor *leftMotor = robot->getMotor("left wheel motor");
   Motor *rightMotor = robot->getMotor("right wheel motor");
@@ -63,23 +50,46 @@ int main(int argc, char **argv) {
   robot->step(TIME_STEP * 4);
 
   // Learn the data structures
-  webots::CameraRecognitionObject colors = colorCam->getRecognitionObjects()[0];
-  std::cout << colors.colors[0] << std::endl;
-  // colors array follows: red, green, blue; each value is a double btwn 0-1
+  int numObj = colorCam->getRecognitionNumberOfObjects();
+  auto objects = colorCam->getRecognitionObjects();
+  std::cout << "Numb Obj = " << numObj << std::endl;
+  // std::cout << colors.colors[0] << std::endl;
+  //  colors array follows: red, green, blue; each value is a double btwn 0-1
+
+  bool red = false;
+  double leftSpeed = 0.5 * MAX_SPEED;
+  double rightSpeed = 0.5 * MAX_SPEED;
   //   Main loop:
   //   - perform simulation steps until Webots is stopping the controller
-  while (robot->step(timeStep) != -1) {
+  while (robot->step(TIME_STEP) != -1) {
     //  Read the sensors:
-    //  Enter here functions to read sensor data, like:
-    //   double val = ds->getValue();
+    objects = colorCam->getRecognitionObjects();
+    numObj = colorCam->getRecognitionNumberOfObjects();
+    if (numObj > 0) {
+      for (int i = 0; i < numObj; i++) {
+        if (objects[i].colors[0] == 1) {
+          std::cout << "RED DETECTED, OBJ " << i << std::endl;
+          red = true;
+        } else {
+          std::cout << "No Red on obj " << i << std::endl;
+        }
+      }
+    } else {
+      std::cout << "no OBJ in view" << std::endl;
+    }
+    if (red == true) {
+      leftSpeed = 0.0;
+      rightSpeed = 0.0;
+      red = false;
+    } else {
+      leftSpeed = 1 * MAX_SPEED;
+      rightSpeed = 0.7 * MAX_SPEED;
+    }
 
-    // Process sensor data here.
-
-    // Enter here functions to send actuator commands, like:
-    //  motor->setPosition(10.0);
+    // write actuators inputs
+    leftMotor->setVelocity(leftSpeed);
+    rightMotor->setVelocity(rightSpeed);
   };
-
-  // Enter here exit cleanup code.
 
   delete robot;
   return 0;

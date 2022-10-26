@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.3468948190435305 0.5579439391598371 0.7538982327048925 1.3792397028620753
-  position -0.40035695443869695 -0.7806408298673422 1.0245232470125945
+  orientation -0.2881799351915523 0.46350720564501935 0.8379220699254427 1.276722206058968
+  position -0.9045180205269349 -2.3141643860400385 1.890855302987091
 }
 TexturedBackground {
 }
@@ -32,7 +32,7 @@ Floor {
   tileSize 1 1
 }
 E-puck {
-  translation 0.22 4.68454e-05 -3.19811e-05
+  translation 0.02 -0.159953 6.02268e-06
   rotation 1.4989899894291692e-09 0.00011875999916250818 0.9999999929480312 3.14159
   controller "epuck_blob_recognition"
   turretSlot [
@@ -47,7 +47,7 @@ E-puck {
       fieldOfView 0.84
       width 75
       recognition Recognition {
-        maxRange 0.5
+        maxRange 0.6
         segmentation TRUE
       }
     }
@@ -122,7 +122,7 @@ Solid {
   boundingObject USE WALL
 }
 Solid {
-  translation -0.04 -0.11 0.07
+  translation -0.24 -0.01 0.07
   children [
     DEF Sphere Shape {
       appearance PBRAppearance {
@@ -143,7 +143,7 @@ Solid {
   ]
 }
 Solid {
-  translation 0.33 0.29 0.07
+  translation 0.38 0.09 0.07
   children [
     DEF Sphere Shape {
       appearance PBRAppearance {
