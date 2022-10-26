@@ -1,0 +1,3 @@
+build/*
+.cache/*
+epuck_blob_recognition

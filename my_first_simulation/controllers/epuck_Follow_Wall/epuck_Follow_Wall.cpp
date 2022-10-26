@@ -8,8 +8,10 @@
 #define TIME_STEP 64
 #define MAX_SPEED 6.28
 
+#include <webots/Camera.hpp>
 #include <webots/DistanceSensor.hpp>
 #include <webots/Motor.hpp>
+#include <webots/Pen.hpp>
 #include <webots/Robot.hpp>
 
 // All the webots classes are defined in the "webots" namespace
@@ -19,6 +21,7 @@ using namespace webots;
 // "controllerArgs" field of the Robot node
 int main(int argc, char **argv) {
 
+  std::cout << "STARTING PROGRAM" << std::endl;
   // create the Robot instance.
   Robot *robot = new Robot();
 
@@ -26,6 +29,7 @@ int main(int argc, char **argv) {
   int timeStep = (int)robot->getBasicTimeStep();
 
   // initalize devices
+  std::cout << "INIT DEVICES" << std::endl;
   DistanceSensor *ps[8];
   char psNames[8][4] = {"ps0", "ps1", "ps2", "ps3", "ps4", "ps5", "ps6", "ps7"};
 
@@ -36,19 +40,29 @@ int main(int argc, char **argv) {
     ps[i]->enable(TIME_STEP);
   }
 
+  // Webots pen
+  // Pen *pencil = robot->getPen("pencil");
+  // pencil->write(true);
+
+  // Webots Camera
+  Camera *cam = robot->getCamera("camera");
+  cam->enable(TIME_STEP);
+
   Motor *leftMotor = robot->getMotor("left wheel motor");
   Motor *rightMotor = robot->getMotor("right wheel motor");
 
   // unlock the motors to control by velocity
+  std::cout << "UNLOCKING MOTORS" << std::endl;
   leftMotor->setPosition(INFINITY);
   rightMotor->setPosition(INFINITY);
   leftMotor->setVelocity(0.0);
   rightMotor->setVelocity(0.0);
 
-  // std::cout << "Test" << std::endl;
-
+  bool right_distance = false;
+  bool left_distance = false;
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
+  std::cout << "STARTING RUN";
   while (robot->step(timeStep) != -1) {
     // Read the sensors:
     double psValues[8];
@@ -58,8 +72,10 @@ int main(int argc, char **argv) {
     // detect obstacles
     // std::cout << psValues[1] << std::endl;
     // The higher the value of the distance sensor, the closer the robot is
-    bool right_obstacle = psValues[1] > 80.0 || psValues[2] > 80.0;
-    bool left_obstacle = psValues[5] > 80.0 || psValues[6] > 80.0;
+    right_distance =
+        (psValues[1] < 60.0 || psValues[2] < 60.0) && !left_distance;
+    left_distance =
+        (psValues[1] > 80.0 || psValues[2] > 80.0) && !right_distance;
     // see if there is a wall in front
     bool front_wall = psValues[7] > 80.0 || psValues[0] > 80.0;
 
@@ -68,14 +84,24 @@ int main(int argc, char **argv) {
     double leftSpeed = 0.5 * MAX_SPEED;
     double rightSpeed = 0.5 * MAX_SPEED;
 
-    if (left_obstacle) {
-      // turn right
-      leftSpeed = 0.5 * MAX_SPEED;
-      rightSpeed = -0.5 * MAX_SPEED;
-    } else if (front_wall) {
+    if (front_wall) {
       // turn left
-      leftSpeed = -0.5 * MAX_SPEED;
-      rightSpeed = 0.5 * MAX_SPEED;
+      leftSpeed = -0.8 * MAX_SPEED;
+      rightSpeed = 0.8 * MAX_SPEED;
+      std::cout << "TURNNING LEFT" << std::endl;
+    } else if (right_distance) {
+      // adjust toward wall
+      leftSpeed = 1 * MAX_SPEED;
+      rightSpeed = 0 * MAX_SPEED;
+      right_distance = false;
+      std::cout << "TURNING TOWARD WALL" << std::endl;
+    } else if (left_distance) {
+      leftSpeed = 0.3 * MAX_SPEED;
+      rightSpeed = 0.6 * MAX_SPEED;
+      left_distance = false;
+      std::cout << "TURNING AWAY FROM WALL" << std::endl;
+    } else {
+      std::cout << "GO STRAIGHT" << std::endl;
     }
     // write actuators inputs
     leftMotor->setVelocity(leftSpeed);
