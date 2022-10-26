@@ -1,13 +1,11 @@
 // File:          epuck_blob_recognition.cpp
-// Date:
-// Description:
-// Author:
-// Modifications:
+// Date:          10/26/2022
+// Description:   Epuck drives in a circle and stops when it sees a red object
+// Author:        William Daniel Hiromoto
 
 #include <cstddef>
 #include <iostream>
 #include <ostream>
-#include <vector>
 #define TIME_STEP 64
 #define MAX_SPEED 6.28
 
