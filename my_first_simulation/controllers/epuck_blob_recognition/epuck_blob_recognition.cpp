@@ -42,11 +42,12 @@ int main(int argc, char **argv) {
   // Webots Camera
   Camera *cam = robot->getCamera("camera");
   cam->enable(TIME_STEP);
+  // Add and enable color recognition camera
   Camera *colorCam = robot->getCamera("colorCamera");
   colorCam->recognitionEnable(TIME_STEP);
-  // colorCam->enableRecognitionSegmentation();
+  colorCam->enableRecognitionSegmentation();
   colorCam->enable(TIME_STEP);
-  std::cout << colorCam->getName() << std::endl;
+  // std::cout << colorCam->getName() << std::endl;
 
   Motor *leftMotor = robot->getMotor("left wheel motor");
   Motor *rightMotor = robot->getMotor("right wheel motor");
@@ -58,12 +59,19 @@ int main(int argc, char **argv) {
   leftMotor->setVelocity(0.0);
   rightMotor->setVelocity(0.0);
 
-  // Main loop:
-  // - perform simulation steps until Webots is stopping the controller
+  // wait for objects to appear in vision
+  robot->step(TIME_STEP * 4);
+
+  // Learn the data structures
+  webots::CameraRecognitionObject colors = colorCam->getRecognitionObjects()[0];
+  std::cout << colors.colors[0] << std::endl;
+  // colors array follows: red, green, blue; each value is a double btwn 0-1
+  //   Main loop:
+  //   - perform simulation steps until Webots is stopping the controller
   while (robot->step(timeStep) != -1) {
-    // Read the sensors:
-    // Enter here functions to read sensor data, like:
-    //  double val = ds->getValue();
+    //  Read the sensors:
+    //  Enter here functions to read sensor data, like:
+    //   double val = ds->getValue();
 
     // Process sensor data here.
 
