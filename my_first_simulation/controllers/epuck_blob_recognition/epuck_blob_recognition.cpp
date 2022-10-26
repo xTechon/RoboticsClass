@@ -7,6 +7,13 @@
 // You may need to add webots include files such as
 // <webots/DistanceSensor.hpp>, <webots/Motor.hpp>, etc.
 // and/or to add some other includes
+#include <iostream>
+#define TIME_STEP 64
+#define MAX_SPEED 6.28
+
+#include <cstdio>
+#include <webots/Camera.hpp>
+#include <webots/Motor.hpp>
 #include <webots/Robot.hpp>
 
 // All the webots classes are defined in the "webots" namespace
@@ -31,6 +38,25 @@ int main(int argc, char **argv) {
   //  Motor *motor = robot->getMotor("motorname");
   //  DistanceSensor *ds = robot->getDistanceSensor("dsname");
   //  ds->enable(timeStep);
+
+  // Webots Camera
+  Camera *cam = robot->getCamera("camera");
+  cam->enable(TIME_STEP);
+  Camera *colorCam = robot->getCamera("colorCamera");
+  colorCam->recognitionEnable(TIME_STEP);
+  // colorCam->enableRecognitionSegmentation();
+  colorCam->enable(TIME_STEP);
+  std::cout << colorCam->getName() << std::endl;
+
+  Motor *leftMotor = robot->getMotor("left wheel motor");
+  Motor *rightMotor = robot->getMotor("right wheel motor");
+
+  // unlock the motors to control by velocity
+  std::cout << "UNLOCKING MOTORS" << std::endl;
+  leftMotor->setPosition(INFINITY);
+  rightMotor->setPosition(INFINITY);
+  leftMotor->setVelocity(0.0);
+  rightMotor->setVelocity(0.0);
 
   // Main loop:
   // - perform simulation steps until Webots is stopping the controller
