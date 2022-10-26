@@ -80,8 +80,8 @@ int main(int argc, char **argv) {
       rightSpeed = 0.0;
       red = false;
     } else {
-      leftSpeed = 1 * MAX_SPEED;
-      rightSpeed = 0.7 * MAX_SPEED;
+      leftSpeed = 0.2 * MAX_SPEED;
+      rightSpeed = 0.2 * MAX_SPEED;
     }
 
     // write actuators inputs
