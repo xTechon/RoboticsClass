@@ -20,8 +20,8 @@ WorldInfo {
   ]
 }
 Viewpoint {
-  orientation -0.48072458833494813 0.4920562105250054 0.7257992531368201 1.863699441971328
-  position 0.5962837249643206 -0.5205192197682631 2.6160712914957562
+  orientation -0.5773502691896258 0.5773502691896258 0.5773502691896258 2.094399693899575
+  position 0.5316493906367532 0.49429751924106213 1.0547998870713056
 }
 TexturedBackground {
 }
@@ -33,13 +33,15 @@ Floor {
   tileSize 1 1
 }
 E-puck {
-  translation 0.0900301 0.04 6.98427e-05
+  translation 0.24003 0.25 -3.19816e-05
   rotation 0 1 0 0
-  controller "epuck_blob_recognition"
+  controller "Epuck_Move_To_Point"
   turretSlot [
     Compass {
+      translation 0.01 0 0
     }
     GPS {
+      translation 0.01 0 0
     }
     Pen {
       translation 0 0 -0.047

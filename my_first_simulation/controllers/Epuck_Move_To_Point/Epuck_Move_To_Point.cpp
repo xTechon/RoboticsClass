@@ -6,13 +6,13 @@
 
 // You may need to add webots include files such as
 // and/or to add some other includes
-#include <stdio.h>
-#include <stdlib.h>
-#include <webots/Compass.hpp>
-#include <webots/GPS.hpp>
-#include <webots/Robot.hpp>
+#include "Epuck_Move_To_Point.h"
+
+#include "webots/Compass.hpp"
 
 using namespace webots;
+
+#define TIME_STEP 64
 
 // 50% speed, therefore angularspeed will be 3.14 rad/s
 // Tangential speed = angular speed * wheel radius
@@ -28,27 +28,33 @@ using namespace webots;
 // Speed of robot spinning in place in degrees per second
 // angular speed in degrees = rotational speed * 360
 // angular speed in degrees = 0.3940309 * 306
-#define ROBOT_ANGULAR_SPEED_DEG = 141.851127971
+#define ROBOT_ROTATIONAL_SPEED_DEG = 141.851127971
+
+#define DEGREE_ERROR            2
+#define GPS_SAMPLING_PERIOD     1 // in ms
+#define COMPASS_SAMPLING_PERIOD 1 // in ms
 
 int main(int argc, char** argv) {
   // create the Robot instance.
   Robot* robot = new Robot();
 
   // get the time step of the current world.
-  int timeStep = (int) robot->getBasicTimeStep();
+  // int timeStep = (int) robot->getBasicTimeStep();
 
-  // You should insert a getDevice-like function in order to get the
-  // instance of a device of the robot. Something like:
-  //  Motor *motor = robot->getMotor("motorname");
-  //  DistanceSensor *ds = robot->getDistanceSensor("dsname");
-  //  ds->enable(timeStep);
+  // init sensors
+  GPS* locator    = robot->getGPS("gps");
+  Compass* needle = robot->getCompass("compass");
 
+  locator->enable(GPS_SAMPLING_PERIOD);
+  needle->enable(COMPASS_SAMPLING_PERIOD);
+
+  const double* curCoord = nullptr;
   // Main loop:
-  // - perform simulation steps until Webots is stopping the controller
-  while (robot->step(timeStep) != -1) {
+  while (robot->step(TIME_STEP) != -1) {
     // Read the sensors:
-    // Enter here functions to read sensor data, like:
-    //  double val = ds->getValue();
+    curCoord = locator->getValues();
+    // std::printf("%f, %f", curCoord[0], curCoord[1]);
+    std::cout << curCoord[0] << "," << curCoord[1] << std::endl;
 
     // Process sensor data here.
 
