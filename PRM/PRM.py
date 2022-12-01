@@ -43,21 +43,23 @@ class Node:
         self.__y = y
 
     def point(self):
-        """Returns x,y as list"""
+        """Return x,y as list."""
         return [self.__x, self.__y]
 
     def tup(self):
-        """Returns x,y as tupple"""
+        """Return x,y as tupple."""
         return (self.__x, self.__y)
 
     def __str__(self):
-        """returns the string value of the node"""
+        """Return the string value of the node."""
         return (self.__x, self.__y).__str__()
 
     def x(self):
+        """Return the x value of the object."""
         return self.__x
 
     def y(self):
+        """Return the y value of the object."""
         return self.__y
 
 
