@@ -1,0 +1,113 @@
+#VRML_SIM R2022b utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2022b/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+
+WorldInfo {
+  basicTimeStep 16
+  contactProperties [
+    ContactProperties {
+      material2 "pen"
+    }
+    ContactProperties {
+      material2 "dumbbell"
+      coulombFriction [
+        0
+      ]
+    }
+  ]
+}
+Viewpoint {
+  orientation -0.48072458833494813 0.4920562105250054 0.7257992531368201 1.863699441971328
+  position 0.5962837249643206 -0.5205192197682631 2.6160712914957562
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+Floor {
+  translation 0.5 0.5 0
+  size 1 1
+  tileSize 1 1
+}
+E-puck {
+  translation 0.0900301 0.04 6.98427e-05
+  rotation 0 1 0 0
+  controller "epuck_blob_recognition"
+  turretSlot [
+    Compass {
+    }
+    GPS {
+    }
+    Pen {
+      translation 0 0 -0.047
+      rotation 0 0 -1 -1.5707953071795862
+      children [
+        Transform {
+          rotation 0 1 0 0
+          children [
+            DEF penshape Shape {
+              appearance PBRAppearance {
+                baseColor 1 0.692371 0
+                roughness 0.3707939685999999
+                metalness 0
+              }
+              geometry Cylinder {
+                height 0.14
+                radius 0.004
+              }
+            }
+          ]
+        }
+      ]
+      inkColor 1 0.8 0
+      inkDensity 1
+      leadSize 0.01
+    }
+  ]
+}
+Solid {
+  translation 1.01 0.5 0.05
+  children [
+    DEF WALL Shape {
+      appearance PBRAppearance {
+        baseColor 0 0.333333 1
+        roughness 0.5
+        metalness 0
+      }
+      geometry Box {
+        size 0.02 1 0.1
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0.5 1.01 0.05
+  rotation 0 0 1 1.5708003061004252
+  children [
+    USE WALL
+  ]
+  name "solid(2)"
+  boundingObject USE WALL
+}
+Solid {
+  translation 0.5 -0.01 0.05
+  rotation 0 0 1 1.5707996938995747
+  children [
+    USE WALL
+  ]
+  name "solid(3)"
+  boundingObject USE WALL
+}
+Solid {
+  translation -0.01 0.5 0.05
+  children [
+    USE WALL
+  ]
+  name "solid(4)"
+  boundingObject USE WALL
+}
